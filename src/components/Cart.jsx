@@ -39,7 +39,7 @@ const Cart = () => {
 
   const checkoutProducts = () => {
     localStorage.clear();
-
+    dispatch(fetchCartProducts());
     toast.success(" Items have been checkout out");
   };
 
