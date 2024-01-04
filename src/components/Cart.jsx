@@ -9,17 +9,19 @@ import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    if(fetchCartProducts())
-    {
-    dispatch(fetchCartProducts());
-    }else{
-        return "Add Item"
+    if (fetchCartProducts()) {
+      dispatch(fetchCartProducts());
+    } else {
+      return "Add Item";
     }
   }, []);
   const cartData = useSelector((state) => {
-    return state.cartProducts ;
+    return state.cartProducts;
   });
   const { cartProducts, isLoding, error } = cartData;
+  if (!cartProducts || cartProducts.length === 0) {
+    return <div>Add items to your cart</div>;
+  }
   function totalPrice() {
     let sum = 0;
     for (let i = 0; i < cartProducts.length; i++) {
@@ -31,15 +33,15 @@ const Cart = () => {
   function removeProduct(cart) {
     console.log(cart);
     dispatch(removeCartItem(cart.id));
-    dispatch(fetchCartProducts())
-    toast.success(cart.title+" "+"removed from Cart")
+    dispatch(fetchCartProducts());
+    toast.success(cart.title + " " + "removed from Cart");
   }
-     const navigate = useNavigate()
-  const checkoutProducts=()=>{
+
+  const checkoutProducts = () => {
     localStorage.clear();
-    navigate('/')
-    toast.success(" Items have been checkout out")
-  }
+
+    toast.success(" Items have been checkout out");
+  };
 
   return (
     <div>
@@ -116,7 +118,7 @@ const Cart = () => {
           <div>
             {cartProducts.map((data) => (
               <div
-              key={data.id}
+                key={data.id}
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
