@@ -21,7 +21,13 @@ const initialState = {
 const cartProductsSlice = createSlice({
   name: "cartProducts",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAll: (state) => {
+      state.cartProducts = [];
+      state.isLoading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCartProducts.pending, (state) => {
       state.isLoading = true;
@@ -40,4 +46,5 @@ const cartProductsSlice = createSlice({
   },
 });
 
+export const { resetAll } = cartProductsSlice.actions;
 export default cartProductsSlice.reducer;

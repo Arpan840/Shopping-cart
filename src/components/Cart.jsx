@@ -1,14 +1,23 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCartProducts } from "../redux/features/cart/cart.slice";
+import { fetchCartProducts, resetAll } from "../redux/features/cart/cart.slice";
+import { removeCartItem } from "../redux/features/cart/removeProduct.slice";
+
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const dispatch = useDispatch();
   useEffect(() => {
+    if(fetchCartProducts())
+    {
     dispatch(fetchCartProducts());
+    }else{
+        return "Add Item"
+    }
   }, []);
   const cartData = useSelector((state) => {
-    return state.cartProducts;
+    return state.cartProducts ;
   });
   const { cartProducts, isLoding, error } = cartData;
   function totalPrice() {
@@ -18,6 +27,20 @@ const Cart = () => {
     }
     return sum;
   }
+
+  function removeProduct(cart) {
+    console.log(cart);
+    dispatch(removeCartItem(cart.id));
+    dispatch(fetchCartProducts())
+    toast.success(cart.title+" "+"removed from Cart")
+  }
+     const navigate = useNavigate()
+  const checkoutProducts=()=>{
+    localStorage.clear();
+    navigate('/')
+    toast.success(" Items have been checkout out")
+  }
+
   return (
     <div>
       <div style={{ width: "100vw", textAlign: "center" }}>
@@ -71,6 +94,7 @@ const Cart = () => {
                   width: "100%",
                   padding: "10px",
                 }}
+                onClick={() => removeProduct(cart)}
               >
                 Remove From Cart
               </button>
@@ -83,6 +107,7 @@ const Cart = () => {
             backgroundColor: "black",
             color: "white",
             margin: "20px",
+            height: "100%",
           }}
         >
           <div style={{ width: "100%", textAlign: "center", paddingTop: "5%" }}>
@@ -91,6 +116,7 @@ const Cart = () => {
           <div>
             {cartProducts.map((data) => (
               <div
+              key={data.id}
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -119,19 +145,27 @@ const Cart = () => {
               <p>${totalPrice()}</p>
             </div>
             <hr style={{ width: "100%", border: "3px solid white" }} />
-            <div style={{width:"100%", display:"flex", alignItems:'center', justifyContent:"center"}}>
-            <button
+            <div
               style={{
-                backgroundColor: "white",
-                color: "black",
-                whidth: "100%",
-                textAlign: "center",
-                margin: "auto",
-                padding: "20px",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              Click To Checkout
-            </button>
+              <button
+                style={{
+                  backgroundColor: "white",
+                  color: "black",
+                  whidth: "100%",
+                  textAlign: "center",
+                  margin: "auto",
+                  padding: "20px",
+                }}
+                onClick={checkoutProducts}
+              >
+                Click To Checkout
+              </button>
             </div>
           </div>
         </div>

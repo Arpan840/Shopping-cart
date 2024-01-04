@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../redux/features/products/products.slice";
+import { toast } from 'react-toastify';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -23,8 +24,10 @@ const Home = () => {
       existingCart.push(product);
       localStorage.setItem("product", JSON.stringify(existingCart));
       console.log("Product added to cart:", product);
+      toast.success("Product added to cart:", product);
     } else {
       console.log("Product is already in the cart");
+      toast.error("Product is already in the cart")
     }
   }
 
