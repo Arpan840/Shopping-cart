@@ -20,7 +20,11 @@ const Cart = () => {
   });
   const { cartProducts, isLoding, error } = cartData;
   if (!cartProducts || cartProducts.length === 0) {
-    return <div>Add items to your cart</div>;
+    return (
+      <div style={{ width: "100vw", textAlign: "center" }}>
+        <h1>Add items to your cart</h1>
+      </div>
+    );
   }
   function totalPrice() {
     let sum = 0;
